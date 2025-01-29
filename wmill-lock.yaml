@@ -1,0 +1,10 @@
+locks:
+  f/data_sources/official_showcase: 36c87e03fa9695993997357dbada6242cce857b9332f3162436cebb745b7df84
+  f/main/ATPT_grister: ea8bfe0aef36fa52dc2a1bcace1988af3200d89c102b6fbfc83efc8e0602896f
+  f/main/ATPTGrister: c55ea5544985c0729215534b30bd12460998c26b8d190e2f9505e880a7d73fae
+  f/main/Collector: 468bbfe84c0ec6f4c273505ff2d9a7145011ed80cf4c115e2a4b02707e24c1e6
+  f/main/feed_fetcher: e29a81f370aff1f1603829774fb64691e157106181a17f58533d6047aa153a81
+  f/main/FieldCollector: 214b3abadfd0f65fe9805e7840724525b3b82d2bd04049bee5d30ec6ef9b69a2
+  f/main/official_showcase: 5759916bde47a3317bcaba4db29f74fe24fe4881da1383b77d989c7d5203298d
+  f/main/results_table: 320c982c64b5a8db318d37da36a530f533edd8c37ef7a171c5033f47b0cd5dea
+  f/main/write_db: 4897c37f7cc7e1e38e48bab65424378077b7ba0cd219866c39bbf5eeb6cb088d

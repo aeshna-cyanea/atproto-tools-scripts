@@ -1,0 +1,11 @@
+summary: ''
+description: ''
+lock: '!inline f/data_sources/official_showcase.script.lock'
+has_preprocessor: false
+kind: script
+no_main_func: false
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties: {}
+  required: []

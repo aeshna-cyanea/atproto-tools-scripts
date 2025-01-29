@@ -1,0 +1,40 @@
+summary: Official Showcase crawler
+description: ''
+value:
+  modules:
+    - id: d
+      value:
+        type: script
+        input_transforms:
+          rss_feed:
+            type: static
+            value: '$res:f/data_sources/official_showcase_rss'
+        is_trigger: true
+        path: f/main/feed_fetcher
+      continue_on_error: false
+      stop_after_if:
+        expr: '!result || (Array.isArray(result) && result.length == 0)'
+        skip_if_stopped: true
+    - id: b
+      value:
+        type: script
+        input_transforms: {}
+        is_trigger: false
+        path: f/data_sources/official_showcase
+      continue_on_error: false
+    - id: c
+      value:
+        type: script
+        input_transforms:
+          data:
+            type: javascript
+            expr: previous_result
+        is_trigger: false
+        path: f/main/write_db
+      continue_on_error: false
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  order: []
+  properties: {}
+  required: []

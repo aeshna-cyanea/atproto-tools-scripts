@@ -1,0 +1,14 @@
+summary: write source to db
+description: ''
+lock: '!inline f/main/write_db.script.lock'
+kind: script
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  properties:
+    data:
+      type: object
+      description: ''
+      default: null
+  required:
+    - data

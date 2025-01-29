@@ -1,0 +1,12 @@
+summary: 'weekly tuesday, saturday'
+args:
+  rss_feed: '$res:u/autumn/official_showcase_rss'
+cron_version: v2
+email: autumn-weaver@proton.me
+enabled: true
+is_flow: false
+no_flow_overlap: false
+schedule: '0 53 21 * * tue,sat'
+script_path: f/main/feed_fetcher
+timezone: Europe/Moscow
+ws_error_handler_muted: false

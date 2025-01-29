@@ -1,0 +1,17 @@
+summary: RSS Feed Fetcher
+description: Fork of hub/1536/RSS/RSS Feed Fetcher
+lock: '!inline f/main/feed_fetcher.script.lock'
+kind: trigger
+schema:
+  $schema: 'https://json-schema.org/draft/2020-12/schema'
+  type: object
+  order:
+    - rss_feed
+  properties:
+    rss_feed:
+      type: object
+      description: ''
+      default: null
+      format: resource-rss
+  required:
+    - rss_feed

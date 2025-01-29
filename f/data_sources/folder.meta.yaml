@@ -1,0 +1,6 @@
+summary: scripts to crawl data sources
+display_name: data_sources
+extra_perms:
+  u/autumn: true
+owners:
+  - u/autumn
