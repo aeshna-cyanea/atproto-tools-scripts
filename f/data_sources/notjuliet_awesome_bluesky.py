@@ -49,12 +49,3 @@ def main():
                 c.add_entry(url, entry)
 
     return c.output()
-
-if __name__ == "__main__":
-    import json
-    import pprint
-
-    with open("/home/autumn/out.json", "w") as f:
-        o = main()
-        pprint.pprint(o)
-        json.dump(o, f)

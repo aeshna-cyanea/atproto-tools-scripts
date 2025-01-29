@@ -68,11 +68,3 @@ def main() -> dict[str, list]:
         c.add_entry(url, fields)
 
     return c.output()
-
-
-if __name__ == "__main__":
-    with open("/home/autumn/out.json", "w") as f:
-        import pprint
-        o = main()
-        pprint.pp(o)
-        json.dump(o, f)

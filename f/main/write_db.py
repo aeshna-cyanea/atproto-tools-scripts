@@ -171,11 +171,4 @@ def main(data: Any):
 
         authors_records = [make_author_record(i) for i in authors]
         g.add_update_records(authors_table, authors_records)
-
-if __name__ == "__main__":
-    import json
-    with open("/home/autumn/out.json") as f:
-        data = json.load(f)
-        import pprint
-        pprint.pprint(data)
-    main(data)
+        
