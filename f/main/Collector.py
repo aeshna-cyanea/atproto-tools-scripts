@@ -66,12 +66,12 @@ class Collector:
         self._entries.add(url)
 
     def _make_entry_table(self) -> dict[str, Any]: #TODO add in other display modes as types
-        return {"table-col": {"URL": list(self._entries)}}
+        return {"table-row-object": [{"URL": entry} for entry in self._entries]}
     
     def _make_meta_table(self):
-        return { "json": {
-            "source_id": self.source_id,
-        }}
+        return {
+            CMetaKeys.source_id: self.source_id,
+        }
     
     def output(self):
         return { "render_all": [

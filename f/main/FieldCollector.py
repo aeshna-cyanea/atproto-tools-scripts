@@ -20,7 +20,6 @@ class fn: # would have used an enum but it has "name" attr reserved
     repo: str = "repo"
     author: str = "author"
 
-fn.__dict__
 @dataclass
 class FCMetaKeys(CMetaKeys):
     fields: str = "fields"

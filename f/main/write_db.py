@@ -1,8 +1,8 @@
 import re
 import requests
 from f.main.ATPTGrister import ATPTGrister
-from typing import Any, cast
-from FieldCollector import FCMetaKeys as mk, fn
+from typing import Any
+from f.main.FieldCollector import FCMetaKeys as mk, fn
 
 def sql_select_fields_from(items: list[str], fields: list[str], table: str):
     return f"SELECT {", ".join(fields)} FROM {table} WHERE name IN ('{"', '".join(items) }')" 
@@ -46,18 +46,12 @@ def put_get_key(table: str, entries: list[dict[str, Any]] | list[str], keyfield:
     Returns:
         dict[str, dict[str, Any]]: the resulting records, indexed by keyfield
     """
-    assert len(entries) > 0
-    if isinstance(entries[0], str):
-        entries = cast(list[str], entries)
-        entries_set: set[str] = set(entries)
-        out = [{"require": {keyfield: x}} for x in entries]
+
+    entries_set = {x[keyfield] for x in entries}
+    if strip:
+        out = [{"require": {keyfield: x[keyfield]}} for x in entries]
     else:
-        entries = cast(list[dict[str, Any]], entries)
-        entries_set = {x[keyfield] for x in entries}
-        if strip:
-            out = [{"require": {keyfield: x[keyfield]}} for x in entries]
-        else:
-            out = [{"require": {keyfield: x.pop(keyfield)}, "fields": x} for x in entries]
+        out = [{"require": {keyfield: x.pop(keyfield)}, "fields": x} for x in entries]
     g.add_update_records(table, out)
     #TODO convert this list_records to a sql query based on presence of the relevant timestamp instead of a full list. the non-sql filters can only test for value, not existence
     new_records : list[dict[str, Any]] = g.list_records(table)[1]
@@ -76,12 +70,11 @@ def make_table_cols(source : str, target_fields: set[str] = set()):
     Returns:
         list[str]: the column ids
     """
-    timestamp_id = source + "_updatedAt"
-    target_fields = target_fields.copy() | {timestamp_id}
+    target_fields = target_fields.copy()
     
     cols = []
     timestamp_fields = {
-                    "type": "DateTime:America/Los_Angeles",
+                    "type": "DateTime:America/New_York",
                     "recalcWhen": 0,
                     "widgetOptions": {
                         "widget": "TextBox",
@@ -107,7 +100,7 @@ def make_table_cols(source : str, target_fields: set[str] = set()):
             case "tags":
                 fields |= {
                     "type": f"RefList:{col_id}",
-                    "visibleCol": g.get_colRef(col_id, "Tag"),
+                    "visibleCol": g.get_colRef(col_id, "Tag"), #this doesn't work, have to set manually. show to engineering
                 }
             case "rating":
                 fields |= {
@@ -126,9 +119,12 @@ def main(data: Any):
     meta: dict[str, Any] = data['render_all'][0]
     source : str = meta[mk.source_id]
 
-    entries : list[dict[str, Any]] = data['render_all'][1]['table-row-object']
     columns: set[str] = set()
     to_pop: list[str]= [] # fields not needed in the db
+
+    entries_obj: dict[str, Any] = data["render_all"][1]
+    entries = entries_obj.get('table-row-object') or entries_obj.get('table-col')["URL"] #type:ignore
+    assert entries is not None
 
     if mk.fields in meta:
         fields: list[str] = meta[mk.fields] #TODO get a better lib to type-check parsed json
