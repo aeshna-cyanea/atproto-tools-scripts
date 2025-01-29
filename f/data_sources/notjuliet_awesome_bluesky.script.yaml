@@ -1,6 +1,6 @@
 summary: ''
 description: ''
-lock: ''
+lock: '!inline f/data_sources/notjuliet_awesome_bluesky.script.lock'
 kind: script
 schema:
   $schema: 'https://json-schema.org/draft/2020-12/schema'

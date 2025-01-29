@@ -121,7 +121,6 @@ def make_table_cols(source : str, target_fields: set[str] = set()):
     new_refs = g.get_colRefs(entries_table, set(target_fields))
     timestamp_fields["recalcDeps"] = new_refs
     g.update_cols(entries_table, [{"id": timestamp_id, "fields": timestamp_fields}])
-    #TODO timestamp support. needs to happen after everything else so the trigger formula can bind to the other cols  
 
 def main(data: Any):
     meta: dict[str, Any] = data['render_all'][0]

@@ -26,7 +26,7 @@ class FCMetaKeys(CMetaKeys):
     fields: str = "fields"
     """list of possible fields in the source (for making columns before db write)"""
 
-def add_missing[T](dest: list[T], source: Iterable[T]):
+def add_missing(dest: list, source: Iterable):
     dest.extend(i for i in source if i not in dest)
 
 class FieldCollector(Collector):
