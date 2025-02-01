@@ -92,10 +92,10 @@ class FieldCollector(Collector):
                 case _:
                     out[self._prefix + field] = value
 
-        if old := self._entries_dict.get(url, None):
+        if old := self._entries_dict.get(url):
             self._p(url, out, old)
             
-            if old_tags := old.get(self._og_tag_field, None):
+            if old_tags := old.get(self._og_tag_field):
                 add_missing(out[self._og_tag_field], old_tags)
 
             if old_rating := old.get(self._fn.rating, 0):

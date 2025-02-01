@@ -1,5 +1,5 @@
-from typing import Any
-from pygrister.api import Apiresp, GristApi
+from typing import Any, Iterable
+from pygrister.api import GristApi
 import wmill
 from json import loads
 
@@ -15,7 +15,7 @@ class CustomGrister(GristApi):
 
     # don't like doing this but the put columns enpdoint has really weird behaviour, sometimes it invents a new id for you and makes a new column with it
     # also changed the noadd and noupdate default params, kinda weird to have both of those true by default.
-    def add_update_cols(self, table_id: str, cols: list[dict], noadd: bool = False, noupdate: bool = False, replaceall: bool = False, doc_id: str = '', team_id: str = '') -> Apiresp:
+    def add_update_cols(self, table_id: str, cols: list[dict], noadd: bool = False, noupdate: bool = False, replaceall: bool = False, doc_id: str = '', team_id: str = ''):
         if replaceall:
             return super().add_update_cols(
                 table_id, cols, noadd, noupdate, replaceall, doc_id, team_id
@@ -23,17 +23,28 @@ class CustomGrister(GristApi):
         
         target_col_ids = {col["id"] for col in cols}
         old_cols = self.list_cols(table_id)[1]
-        old_col_ids: set[str] = {x["id"] for x in old_cols}
-        if (new_col_ids := target_col_ids - old_col_ids) and not noadd:
-            self.add_cols(table_id, [col for col in cols if col["id"] in new_col_ids])
-        if (update_col_ids := old_col_ids & target_col_ids) and not noupdate:
+        col_ids: set[str] = {x["id"] for x in old_cols}
+        if (new_col_ids := target_col_ids - col_ids) and not noadd:
+            col_ids |= set(self.add_cols(table_id, [col for col in cols if col["id"] in new_col_ids])[1])
+        elif (update_col_ids := col_ids & target_col_ids) and not noupdate:
             super().add_update_cols(table_id, [col for col in cols if col["id"] in update_col_ids], noadd=True)
-        return int(self.resp_code), None
+        return int(self.resp_code), col_ids
 
     def get_colRef(self, table_id: str, col_id: str) -> int | None:
         return next((col["fields"]["colRef"] for col in self.list_cols(table_id)[1] if col["id"] == col_id), None)
 
-    def get_colRefs(self, table_id: str, col_ids: set[str], format: bool = True):
+    def get_colRefs(self, table_id: str, col_ids: Iterable[str], format: bool = True):
+        """
+        finds colRefs for a set of columns, returned formatted as a json array string
+
+        Args:
+            table_id (str): the grist table id
+            col_ids (set[str]): a list of column ids
+            format (bool, optional): whether to return a list instead of a key. Defaults to True.
+
+        Returns:
+            str | dict[str,int]: either the {id:colref, ...} dict, or a string with a list of colRefs
+        """
         ref_key: dict[str, int] = {col["id"]: col["fields"]["colRef"] for col in self.list_cols(table_id)[1] if col["id"] in col_ids}
         if format:
             return str(list(ref_key.values()))
