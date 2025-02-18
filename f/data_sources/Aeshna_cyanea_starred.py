@@ -48,7 +48,12 @@ def main():
         r = requests.post(
             "https://api.github.com/graphql", json={"query": query, "variables": {"after": after_cursor}}, headers=headers
         ).json()
-        items = r["data"]["node"]["items"]
+        node = r["data"]["node"]
+        if (current_timestamp := make_timestamp(node["updatedAt"])) == c.last_update_timestamp:
+            return
+        else:
+            c.current_update_timestamp = current_timestamp
+        items = node["items"]
         if items["pageInfo"]["hasNextPage"]:
             after_cursor = items["pageInfo"]["endCursor"]
         else:

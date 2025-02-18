@@ -1,5 +1,5 @@
 import requests
-from f.main.Collector import Collector, gf, ef
+from f.main.Collector import Collector, ef
 import mistune
 
 def render_nodes(nodes):
